@@ -14,5 +14,3 @@
 set -l t_path "~/long/path/to/file"
 @test "shorten_file_path" (pathshorten -a 2 -b $t_path) = $t_path
 
-
-
