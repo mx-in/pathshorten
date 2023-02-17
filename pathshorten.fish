@@ -1,37 +1,21 @@
-#!/bin/fish
+function pathshorten
+    set initial_path = $argv[1]
+    if test (count $argv) -ge 2
+        set keep_num $argv[2]
+    else
+        set keep_num 2
+    end
 
-#function pathshorten -a num -b initial_path -c replacement_path
-function pathshorten -a num inital_path
-
-    echo "pathshorten called with $num"
-
-    echo "args:" $argv
-
-    echo num: $num
-    echo initial_path: $initial_path
-    return
-    echo initial_path: $initial_path
-    echo replacement_path: $replacement_path
-    echo $initial_path
-
-    return
-
-    set file_path (string split '/' $argv[1])
-    set initial_path (string split '/' $initial_path)
-    set shortened ""
+    set file_paths (string split '/' $argv[1])
+    set shorten_path ""
     set file_name (string match -r '[^/]+$' $argv[1])
-    set file_path_length (count $file_path)
-    if test $file_path[1] = $initial_path[1]
-        set file_path[1] $replacement_path
+    set dir_deep (count $file_paths)
+
+    for i in (seq 1 $(math "$dir_deep - 1"))
+        set dir $file_paths[$i]
+        set dir (string match -r '^[^A-Za-z0-9]*\w{0,'$keep_num'}' $dir)
+        set shorten_path $shorten_path"$dir/"
     end
-    for i in (seq 1 $(math "$file_path_length - 1"))
-        set dir $file_path[$i]
-        set dir (string match -r '^[^A-Za-z0-9]*([^\s\/]+)*([^A-Za-z0-9]{0,'$num'}[A-Za-z0-9]{0,'$num'})?[A-Za-z0-9]*' $dir)
-        set shortened $shortened $dir
-        if test $i -lt $(math "$file_path_length - 1")
-            set shortened $shortened /
-        end
-    end
-    set shortened $shortened $file_name
-    echo $shortened
+    set shorten_path $shorten_path$file_name
+    echo $shorten_path
 end
