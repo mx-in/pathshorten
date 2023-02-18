@@ -1,4 +1,5 @@
 function pathshorten
+
     set initial_path = $argv[1]
     if test (count $argv) -ge 2
         set keep_num $argv[2]
