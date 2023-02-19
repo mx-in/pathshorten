@@ -16,4 +16,9 @@ source ~/Projects/pathshorten/functions/pathshorten.fish
 @test '~你好啊/' (pathshorten '~你好啊/') = '~你/'
 @test '~/' (pathshorten '~/') = '~/'
 
+@echo -- file path start with $HOME --
+echo homehomeheome  $HOME
+@test "$HOME" (pathshorten "$HOME") = '~'
+@test "$HOME/" (pathshorten "$HOME/") = '~/'
+
 
