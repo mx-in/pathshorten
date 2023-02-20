@@ -6,23 +6,30 @@ function pathshorten
     
     set initial_path $argv[1]
 
+    # if path is start with $HOME, replace $HOME with ~
     if string match -q "$HOME*" $initial_path
-        # replace $HOME with ~
         set initial_path (string replace -r "^$HOME" "~" $initial_path)
     end 
 
+    # if path length > 1 and it is end with /, remove it
+    if string match -rq '\S+/$' $initial_path
+        set initial_path (string replace -r '/$' '' $initial_path)
+    end
+
+    # keep_num is the number of characters to keep in each directory
     if test (count $argv) -ge 2
         set keep_num $argv[2]
     else
         set keep_num 2
     end
-
     set file_paths (string split '/' $initial_path)
     set shorten_path ""
-    set file_name (string match -r '[^/]+$' $argv[1])
+    set file_name (string match -r '[^/]+$' $initial_path)
     set dir_deep (count $file_paths)
 
-    if test $dir_deep -eq 1
+    #echo file_paths leng (math "$dir_deep - 1") file_name "h$file_name"haha
+    
+    if test $dir_deep -le 1
         echo $initial_path
         return
     end
